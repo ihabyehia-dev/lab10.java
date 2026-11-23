@@ -1,186 +1,117 @@
 package lab8;
 
 public class Queue extends LinkedList {
+    public Queue() {
+        super("Queue");
+    }
 
-	public Queue() {
-		super("Queue");
-	}
+    public void enqueue(int x) {
+        insertAtBack(x);
+    }
 
-	public boolean isEmpty() {
-		return first == null;
-	}
+    public int dequeue() {
+        return removeFromFront();
+    }
 
-	public void display() {
-		if (isEmpty()) {
-			System.out.println("The Queue is empty!");
-		}
+    public int peek() {
+        if (isEmpty()) return -1;
+        return first.data;
+    }
 
-		Node current = first;
+    public int QueueSize() {
+        int count = 0;
+        Node current = first;
+        while (current != null) {
+            count++;
+            current = current.nextNode;
+        }
+        return count;
+    }
 
-		while (current != null) {
-			current.display();
-			current = current.nextNode;
-		}
-	}
+    void rotate(int k) {
+        int n = QueueSize();
+        if (n == 0 || k < 0) return;
+        k = k % n;
+        for (int i = 0; i < k; i++) {
+            enqueue(dequeue());
+        }
+    }
 
-	public void enqueue(int x) {
-		insertAtBack(x);
-	}
+    public int maximum() {
+        if (isEmpty()) return -1;
+        int max = first.data;
+        Node current = first.nextNode;
+        while (current != null) {
+            if (current.data > max) max = current.data;
+            current = current.nextNode;
+        }
+        return max;
+    }
 
-	public int dequeue() {
-		return removeFromFront();
-	}
+    // Returns a new queue with even numbers first. The original stays unchanged.
+    Queue evenbeforeodd() {
+        Queue answer = new Queue();
+        Node current = first;
+        while (current != null) {
+            if (current.data % 2 == 0) answer.enqueue(current.data);
+            current = current.nextNode;
+        }
+        current = first;
+        while (current != null) {
+            if (current.data % 2 != 0) answer.enqueue(current.data);
+            current = current.nextNode;
+        }
+        return answer;
+    }
 
-	public int peek() {
-		if (first == null) {
-			return -1;
-		}
-		return first.data;
-	}
+    // Removes every kth element from this queue and returns the removed elements.
+    Queue removeEveryKth(int k) {
+        Queue removed = new Queue();
+        if (k <= 0) return removed;
+        int n = QueueSize();
+        for (int i = 1; i <= n; i++) {
+            int value = dequeue();
+            if (i % k == 0) removed.enqueue(value);
+            else enqueue(value);
+        }
+        return removed;
+    }
 
-	public int QueueSize() {
-		int count = 0;
+    // Returns unique values in their first-occurrence order.
+    Queue removeDuplicates() {
+        Queue answer = new Queue();
+        Node current = first;
+        while (current != null) {
+            boolean found = false;
+            Node previous = answer.first;
+            while (previous != null) {
+                if (previous.data == current.data) {
+                    found = true;
+                    break;
+                }
+                previous = previous.nextNode;
+            }
+            if (!found) answer.enqueue(current.data);
+            current = current.nextNode;
+        }
+        return answer;
+    }
 
-		Node current = first;
-
-		while (current != null) {
-			count++;
-			current = current.nextNode;
-		}
-
-		return count;
-	}
-
-	void rotate(int k) {
-
-		Queue tmp = new Queue();
-
-		if (first == null) {
-			System.out.println("X");
-		}
-		if (k > QueueSize()) {
-			System.out.println("X");
-		}
-		int count = 0;
-		while (!isEmpty() && count < k) {
-			tmp.enqueue(dequeue());
-			count++;
-		}
-
-		while (!tmp.isEmpty()) {
-			enqueue(tmp.dequeue());
-		}
-
-		while (!isEmpty()) {
-			int x = dequeue();
-			System.out.print(x + " ");
-			tmp.enqueue(x);
-		}
-		while (!tmp.isEmpty()) {
-			int x = tmp.dequeue();
-			System.out.print(x + " ");
-			enqueue(x);
-		}
-	}
-
-	public int maximum() {
-
-		Queue temp = new Queue();
-
-		int max = first.data;
-		while (!isEmpty()) {
-			int x = dequeue();
-
-			if (x > max) {
-				max = x;
-			}
-			temp.enqueue(x);
-		}
-		while (!temp.isEmpty()) {
-			enqueue(temp.dequeue());
-		}
-		return max;
-	}
-
-	Queue evenbeforeodd() {
-		Queue evenbodd = new Queue();
-
-		for (int i = 0; i < QueueSize(); i++) {
-			int x = dequeue();
-			if (x % 2 == 0) {
-				evenbodd.enqueue(x);
-				enqueue(x);
-			}
-			for (int j = 0; j < QueueSize(); i++) {
-				int z = dequeue();
-				evenbodd.enqueue(z);
-				enqueue(z);
-			}
-		}
-		return evenbodd;
-	}
-
-	Queue removeEveryKth(int k) {
-		Queue temp1 = new Queue();
-		Queue temp2 = new Queue();
-
-		for (int i = 0; i < QueueSize(); i++) {
-			int x = dequeue();
-			if (i%k!=0) {
-				temp2.enqueue(x);
-			}
-			temp1.enqueue(x);
-		}
-		
-		while(!temp1.isEmpty()) {
-			enqueue(temp1.dequeue());
-		}
-		
-		return temp2;
-	}
-
-	Queue removeDuplicates() {
-		Queue temp = new Queue();
-
-		for (int i = 0; i < QueueSize(); i++) {
-			int x = dequeue();
-
-			for (int j = 0; j < QueueSize(); j++) {
-				int z = dequeue();
-				if (x != z) {
-					enqueue(z);
-				}
-			}
-			temp.enqueue(x);
-		}
-		return temp;
-	}
-
-	Queue mergeAlternate(Queue two) {
-		Queue merge = new Queue();
-		Queue temp1 = new Queue();
-		Queue temp2 = new Queue();
-
-		while (!isEmpty()) {
-			int x = dequeue();
-
-			while (!two.isEmpty()) {
-				int z = dequeue();
-				if (x == z) {
-					merge.enqueue(z);
-				}
-				temp2.enqueue(z);
-			}
-			temp1.enqueue(x);
-		}
-		while (!temp1.isEmpty()) {
-			enqueue(temp1.dequeue());
-		}
-		while (!temp2.isEmpty()) {
-			two.enqueue(temp2.dequeue());
-		}
-
-		return merge;
-	}
-
+    // Alternates the values of two queues without emptying either queue.
+    Queue mergeAlternate(Queue two) {
+        Queue result = new Queue();
+        Node a = first;
+        Node b = two.first;
+        while (a != null || b != null) {
+            if (a != null) {
+                result.enqueue(a.data);
+                a = a.nextNode;
+            }
+            if (b != null) {
+                result.enqueue(b.data);
+                b = b.nextNode;
+            }
+        }
+        return result;
+    }
 }
