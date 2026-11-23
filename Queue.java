@@ -1,5 +1,6 @@
 package lab8;
 
+/** FIFO queue and related operations built on a custom linked list. */
 public class Queue extends LinkedList {
     public Queue() {
         super("Queue");
