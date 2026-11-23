@@ -18,4 +18,4 @@ A Java Data Structures lab implementing a queue using a custom linked list rathe
 Use package `lab8` in Eclipse, import the four files and run `main.java`.
 
 ## Notes
-This is course practice. The queue's rotation, maximum, kth-item removal, duplicate filtering, even/odd ordering and alternating merge logic were corrected and tested locally. `removeEveryKth(k)` changes the original queue and returns the removed items; the other filtering methods return a new queue. Do not confuse this with `java.util.Queue`.
+This is course practice. The queue includes rotation, maximum-value search, kth-item removal, duplicate filtering, even/odd ordering and alternating merge operations. `removeEveryKth(k)` changes the original queue and returns the removed items; the other filtering methods return a new queue. Do not confuse this with `java.util.Queue`.
